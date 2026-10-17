@@ -1,0 +1,313 @@
+<meta charset="utf-8">
+<title>Wyndow design studies</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Michroma&family=IBM+Plex+Mono:wght@300;400&display=swap">
+<style>
+/* Layout: one column of three framed artboards, each a self-contained study of the same six weeks and the same "today". */
+:root{
+  --page:#F2F3F4; --ink:#121518; --ink-2:#5B636B; --hair:#DADDE0;
+  --f-geo:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  --f-wide:"Michroma","Eurostile","Microgramma",var(--f-geo);
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--page:#0D0F11;--ink:#E7EAEC;--ink-2:#99A2AA;--hair:#262B30;color-scheme:dark}}
+:root[data-theme="dark"]{--page:#0D0F11;--ink:#E7EAEC;--ink-2:#99A2AA;--hair:#262B30;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--ink);font:300 16px/1.55 var(--f-geo);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-block:48px 80px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.intro{max-width:64ch}
+.intro h1{font:300 40px/1.1 var(--f-geo);letter-spacing:-.01em;margin:0 0 12px;text-wrap:balance}
+.intro p{color:var(--ink-2);margin:0 0 10px}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px 32px;margin:28px 0 56px;padding:0;list-style:none}
+.rules li{border-top:1px solid var(--hair);padding-top:12px;font-size:15px;color:var(--ink-2)}
+.rules b{display:block;font-weight:500;color:var(--ink);margin-bottom:2px}
+.study{margin-bottom:72px}
+.slabel{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;margin-bottom:6px}
+.slabel span{font:400 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.slabel h2{font:400 28px var(--f-geo);margin:0}
+.study > p{color:var(--ink-2);margin:0 0 18px;max-width:70ch}
+.board{border-radius:28px;overflow:hidden}
+.body{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:28px;align-items:start}
+@media (max-width:860px){.body{grid-template-columns:minmax(0,1fr)}}
+.dow,.row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) 44px;gap:6px;align-items:center}
+.row{margin-bottom:6px}
+.wkh{text-align:right;font-size:12px}
+@media (max-width:520px){.dow,.row{grid-template-columns:repeat(7,minmax(0,1fr)) 30px;gap:4px}}
+
+/* ---- A: Discovery ---- */
+.A{background-color:#F6F7F8;background-image:radial-gradient(#E1E4E7 1px,transparent 1.3px);background-size:16px 16px;padding:28px;color:#1A1E22}
+.A .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:30px}
+.A .brand{font:500 13px var(--f-geo);letter-spacing:.42em}
+.A .next{display:flex;align-items:center;gap:10px;font:400 13px var(--f-geo);letter-spacing:.06em;color:#4C545B;background:#FFFFFF;border-radius:999px;padding:8px 16px 8px 12px;box-shadow:0 10px 30px -18px rgba(25,40,55,.35)}
+.A .next i{width:8px;height:8px;border-radius:50%;background:#2BA8D8;box-shadow:0 0 0 4px rgba(43,168,216,.15)}
+.A h3{font:200 34px/1 var(--f-geo);margin:0 0 18px;letter-spacing:-.01em}
+.A .dow{font:400 11px var(--f-geo);letter-spacing:.2em;color:#9AA2A9;margin-bottom:8px}
+.A .cell{height:48px;border-radius:15px;position:relative;font:300 13px var(--f-geo);padding:6px 9px;color:#9CA3AA;background:#E6E9EC}
+.A .cell.night{background:#D2D7DC;color:#6E767D}
+.A .cell.rest{background:#EDEFF1}
+.A .cell.call{background:#F5F6F7;box-shadow:inset 0 0 0 1px #D4D9DD}
+.A .cell.mine{background:#FFFFFF;color:#1A1E22;box-shadow:0 8px 20px -16px rgba(25,40,55,.45)}
+.A .cell.past{opacity:.45}
+.A .cell.today{box-shadow:inset 0 0 0 2px #111417}
+.A .dots{position:absolute;left:9px;bottom:8px;display:flex;gap:4px}
+.A .dots i{width:6px;height:6px;border-radius:50%}
+.A .dots i.o{box-shadow:inset 0 0 0 1px #AEB5BB}
+.A .wkh{color:#9AA2A9;font-family:var(--f-geo)}
+.A .panel{background:#FFFFFF;border-radius:30px;padding:26px;box-shadow:0 30px 60px -36px rgba(25,40,55,.4)}
+.A .eb{font:400 11px var(--f-geo);letter-spacing:.24em;color:#8E969D;text-transform:uppercase}
+.A .big{font:200 30px/1.15 var(--f-geo);margin:6px 0 18px}
+.A .line{display:grid;grid-template-columns:52px 12px 1fr auto;gap:10px;align-items:center;padding:9px 0;font-size:15px}
+.A .line .t{font:300 13px var(--f-mono);color:#8E969D}
+.A .line .d{width:8px;height:8px;border-radius:50%}
+.A .line .h{font:300 13px var(--f-mono);color:#8E969D}
+.A .line.dim{color:#8E969D}
+.A .note{margin:16px 0 18px;padding:14px 16px;border-radius:18px;background:#F4F5F6;font-size:14px;color:#4C545B}
+.A .btn{display:inline-flex;align-items:center;gap:10px;background:#111417;color:#F4F5F6;border:none;border-radius:999px;padding:12px 22px;font:400 14px var(--f-geo);letter-spacing:.06em;cursor:pointer}
+
+/* ---- B: Console ---- */
+.B{background:#E8EBED;padding:18px;color:#A9BBC8}
+.B .screen{background:#0A0E13;border-radius:18px;padding:22px;box-shadow:inset 0 0 0 1px #1A2430}
+.B .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+.B .brand{font:400 12px var(--f-wide);letter-spacing:.3em;color:#DCE6EC}
+.B .next{font:400 12px var(--f-mono);letter-spacing:.08em;color:#49D3FF;text-shadow:0 0 10px rgba(73,211,255,.55)}
+.B .lab{font:400 10px var(--f-wide);letter-spacing:.24em;color:#5D7383;text-transform:uppercase;margin-bottom:12px}
+.B .dow{font:400 10px var(--f-mono);letter-spacing:.2em;color:#4A5D6B;margin-bottom:6px}
+.B .cell{height:46px;border-radius:8px;position:relative;font:400 12px var(--f-mono);padding:5px 7px;background:#0F151C;color:#34414C}
+.B .cell.night{background:#0B1016;color:#2A353F}
+.B .cell.mine{background:#131D27;color:#C9D8E2;box-shadow:inset 0 0 0 1px #1F2E3B}
+.B .cell.call{background:#111821;color:#5E7282}
+.B .cell.past{opacity:.4}
+.B .cell.today{box-shadow:inset 0 0 0 1px #49D3FF,0 0 14px -2px rgba(73,211,255,.5)}
+.B .code{position:absolute;right:6px;top:5px;font-size:9px;letter-spacing:.06em;color:#3F505D}
+.B .bars{position:absolute;left:6px;right:6px;bottom:6px;display:flex;gap:3px}
+.B .bars i{flex:1;height:3px;border-radius:2px}
+.B .bars i.o{background:#25323E}
+.B .wkh{color:#4A5D6B;font-family:var(--f-mono)}
+.B .readout{font:300 52px/1 var(--f-mono);color:#49D3FF;text-shadow:0 0 18px rgba(73,211,255,.5);margin:8px 0 6px}
+.B .sub{font:400 11px var(--f-wide);letter-spacing:.18em;color:#7E95A5;text-transform:uppercase}
+.B .line{display:grid;grid-template-columns:48px 1fr auto;gap:10px;padding:8px 0;border-top:1px solid #16202A;font:400 13px var(--f-mono);color:#93A8B6}
+.B .line .t{color:#4F6372}
+.B .note{margin:14px 0;font:400 13px/1.5 var(--f-mono);color:#7E95A5}
+.B .btn{background:#E8EBED;color:#0A0E13;border:none;border-radius:999px;padding:11px 20px;font:400 11px var(--f-wide);letter-spacing:.2em;cursor:pointer}
+
+/* ---- C: Hairline ---- */
+.C{background:#FFFFFF;padding:30px;color:#101214;box-shadow:inset 0 0 0 1px #ECEEF0}
+.C .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:34px;padding-bottom:14px;border-bottom:1px solid #ECEEF0}
+.C .brand{font:400 20px var(--f-geo);letter-spacing:.02em}
+.C .next{font:300 15px var(--f-geo);color:#5B636B}
+.C .next b{font-weight:400;color:#101214}
+.C .dow{font:400 11px var(--f-geo);letter-spacing:.16em;color:#A3A9AF;margin-bottom:6px}
+.C .row{margin-bottom:14px}
+.C .col{display:flex;flex-direction:column;align-items:center;gap:5px}
+.C .n{font:300 13px var(--f-geo);color:#5B636B}
+.C .col.past{opacity:.35}
+.C .col.today .n{color:#101214;font-weight:500}
+.C .cap{position:relative;width:12px;height:64px;border-radius:6px;background:#F1F2F4;overflow:hidden}
+.C .col.today .cap{box-shadow:0 0 0 2px #FFFFFF,0 0 0 3px #101214}
+.C .seg{position:absolute;left:0;right:0}
+.C .wkh{color:#A3A9AF;font-family:var(--f-geo)}
+.C .key{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:#7A8188;margin-top:10px}
+.C .key span{display:inline-flex;align-items:center;gap:6px}
+.C .key i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.C .date{font:200 76px/0.9 var(--f-geo);letter-spacing:-.03em}
+.C .dname{font:300 18px var(--f-geo);color:#5B636B;margin:8px 0 22px}
+.C .line{display:grid;grid-template-columns:54px 1fr auto;gap:12px;padding:11px 0;border-top:1px solid #ECEEF0;font-size:16px}
+.C .line .t{font:300 14px var(--f-geo);color:#A3A9AF}
+.C .line .h{color:#A3A9AF;font-size:14px}
+.C .note{font-size:15px;color:#5B636B;margin:16px 0 18px;max-width:40ch}
+.C .btn{background:none;border:none;border-bottom:1px solid #101214;padding:0 0 3px;font:400 16px var(--f-geo);cursor:pointer;color:#101214}
+button:focus-visible{outline:2px solid #2BA8D8;outline-offset:3px}
+
+/* ---- D/E: Console with hairline days; palette comes from custom properties set per board ---- */
+.round{font:400 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);border-top:1px solid var(--hair);padding-top:14px;margin:0 0 28px}
+.K{--caph:72px;background:var(--outer);padding:18px}
+.K .screen{background:var(--screen);border-radius:18px;padding:24px;box-shadow:inset 0 0 0 1px var(--edge)}
+.K .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
+.K .brand{font:400 12px var(--f-wide);letter-spacing:.3em;color:var(--brand)}
+.K .hal{color:var(--hal);text-shadow:var(--glowhal)}
+.K .next{font:400 12px var(--f-mono);letter-spacing:.08em;color:var(--s);text-shadow:var(--glowtxt)}
+.K .lab{font:400 10px var(--f-wide);letter-spacing:.24em;color:var(--lab);text-transform:uppercase;margin-bottom:14px}
+.K .dow{font:400 10px var(--f-mono);letter-spacing:.2em;color:var(--dim);margin-bottom:8px}
+.K .row{position:relative;margin-bottom:12px;align-items:start}
+.K .gl{position:absolute;left:0;right:50px;height:1px;background:var(--grid)}
+.K .col{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px}
+.K .cap{position:relative;width:10px;height:var(--caph);border-radius:5px;background:var(--track);overflow:hidden;box-shadow:0 0 0 1px var(--capring)}
+.K .n{font:400 11px var(--f-mono);color:var(--num)}
+.K .col.mine .n{color:var(--numMine)}
+.K .col.past{opacity:.35}
+.K .col.today .cap{box-shadow:0 0 0 2px var(--screen),0 0 0 3px var(--ring),var(--glowring)}
+.K .col.today .n{color:var(--ring)}
+.K .seg{position:absolute;left:0;right:0}
+.K .wkh{color:var(--dim);font:400 11px var(--f-mono);padding-top:28px}
+.K .axis{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;font:400 11px var(--f-mono);letter-spacing:.04em;color:var(--dim)}
+.K .axis span{display:inline-flex;align-items:center;gap:6px}
+.K .axis i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.K .readout{font:300 52px/1 var(--f-mono);color:var(--readout);text-shadow:var(--glowbig);margin:4px 0 8px}
+.K .sub{font:400 11px var(--f-wide);letter-spacing:.18em;color:var(--s);text-transform:uppercase}
+.K .dbar{position:relative;height:10px;border-radius:5px;background:var(--track);margin:22px 0 6px;overflow:hidden}
+.K .ticks{display:flex;justify-content:space-between;font:400 10px var(--f-mono);color:var(--dim);margin-bottom:14px}
+.K .line{display:grid;grid-template-columns:48px 1fr auto;gap:10px;padding:8px 0;border-top:1px solid var(--line);font:400 13px var(--f-mono);color:var(--text)}
+.K .line .t{color:var(--dim)}
+.K .note{margin:14px 0;font:400 13px/1.5 var(--f-mono);color:var(--lab)}
+.K .btn{background:var(--btnBg);color:var(--btnFg);border:none;border-radius:999px;padding:11px 20px;font:400 11px var(--f-wide);letter-spacing:.2em;cursor:pointer}
+@media (max-width:520px){.K{--caph:56px}.K .cap{width:8px}.K .wkh{padding-top:20px}.K .screen{padding:16px}}
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <h1>Wyndow, lighter directions</h1>
+    <p>Every study shows the same six weeks of your real shifts (Oct 12 to Nov 22) and the same Friday. Round 2, at the top, combines the Console screen with the hairline day bars, in dark and light. Round 1 is below for comparison.</p>
+  </header>
+  <ul class="rules">
+    <li><b>Color the time that's yours</b>Shifts recede into quiet grey. Open time and your focus blocks carry the only color on the screen.</li>
+    <li><b>One surface, not many cards</b>Space and tone separate things. Borders and chips mostly go away.</li>
+    <li><b>Tools on demand</b>Brushes, legend, and Find time appear when you act, instead of sitting on screen all the time.</li>
+    <li><b>One heavy element</b>Like the black chairs in the white corridor: the single dark object on screen is the thing to press.</li>
+  </ul>
+
+  <p class="round">Round 2 · Console with hairline days</p>
+  <section class="study">
+    <div class="slabel"><span>Study D</span><h2>Console, hairline, dark</h2></div>
+    <p>Study B's screen with Study C's day bars, revised. Each day is a 24-hour bar, midnight at the top, with faint lines at 06:00, 12:00, and 18:00. Free time is the light part of the bar; shifts are the darkest and recovery is a step lighter, so open time stands out at a glance. Your project blocks keep their colors. The red O and the red now-marker on today's bar are the only red.</p>
+    <div class="board K" id="D"></div>
+  </section>
+
+  <section class="study">
+    <div class="slabel"><span>Study E</span><h2>Console, hairline, light</h2></div>
+    <p>The same layout on a white screen. Shifts become dark ink, as in Study C, and the venture colors sit flat with no glow. The Start button is the one black object.</p>
+    <div class="board K" id="E"></div>
+  </section>
+
+  <p class="round">Round 1</p>
+  <section class="study">
+    <div class="slabel"><span>Study A</span><h2>Discovery</h2></div>
+    <p>Closest to your reference. White bulkheads, soft long curves, a faint perforated floor, geometric type, and status lights for ventures. The only black is the today ring and the Start button.</p>
+    <div class="board A" id="A"></div>
+  </section>
+
+  <section class="study">
+    <div class="slabel"><span>Study B</span><h2>Console</h2></div>
+    <p>The instrument panels from the same set. Light chrome outside, a dark screen inside where your open time lights up and shifts go dark. Most futuristic of the three, and the most dramatic in a light room.</p>
+    <div class="board B" id="B"></div>
+  </section>
+
+  <section class="study">
+    <div class="slabel"><span>Study C</span><h2>Hairline</h2></div>
+    <p>The most minimal. Each day is a slim 24-hour bar, midnight at the top, so a swing, a day shift, and a night look different at a glance and your focus blocks sit at their real hours. Type does the rest.</p>
+    <div class="board C" id="C"></div>
+  </section>
+</div>
+
+<script>
+const T=".SNROOONRBSW...B..NR..NR.WWW...SS..DDBNR..";
+const START=new Date(2026,9,12), TODAY=4;
+const ALLOC={0:"ss",4:"sv",5:"ss",6:"ff",9:"v",12:"f",13:"f",14:"vv",15:"v",16:"vv",17:"vv",20:"f",21:"ss",24:"ss",28:"vv",29:"vv",30:"v-",33:"f",34:"f",37:"-",40:"f",41:"-"};
+const NAME={s:"Snapval",v:"Voisee",f:"Family"};
+const PAL={A:{s:"#2BA8D8",v:"#E3A23B",f:"#9C8AD6"},B:{s:"#49D3FF",v:"#FFB547",f:"#B59CFF"},C:{s:"#2B7FD8",v:"#D99A1E",f:"#8F73CF"}};
+const day=i=>{const d=new Date(START);d.setDate(d.getDate()+i);return d};
+const isWE=i=>i%7>=5;
+function typ(i){const c=T[i];if(c==="D"||c==="W")return "work";return {".":"open",S:"swing",N:"night",R:"rest",B:"call",O:"off"}[c]}
+const mine=t=>t==="open"||t==="off";
+function focusWin(i){const t=typ(i);if(t==="open")return isWE(i)?[14,1]:[11,2];if(t==="off")return [11,2];if(t==="call")return [13,1];return null}
+function shiftSegs(i){const c=T[i];if(c==="D")return [[7.5,19.5,"work"]];if(c==="W")return [[8,i===11?18:20,"work"]];if(c==="S")return [[10,20,"work"]];if(c==="N")return [[17,24,"work"]];if(c==="R")return [[0,13,"work"],[13,22,"rest"]];if(c==="B")return [[9,12,"call"]];return []}
+const alloc=i=>{const w=focusWin(i);if(!w)return [];const a=(ALLOC[i]||"").split("");while(a.length<w[1])a.push("-");return a.slice(0,w[1])};
+const weekH=w=>{let h=0;for(let i=w*7;i<w*7+7;i++){const f=focusWin(i);if(f)h+=f[1]*2+(typ(i)==="off"?1:0)}return h};
+const CODE={work:"WD",night:"N",swing:"SW",call:"BK",rest:"",off:"OFF",open:""};
+const DOW=["M","T","W","T","F","S","S"];
+const dowRow=(cls,f)=>`<div class="dow ${cls||""}">${DOW.map(x=>`<span style="text-align:center">${x}</span>`).join("")}<span></span></div>`;
+
+/* Study A */
+(function(){
+  const P=PAL.A;let rows="";
+  for(let w=0;w<6;w++){let c="";for(let i=w*7;i<w*7+7;i++){const t=typ(i);const cls=["cell",t==="night"?"night":t==="rest"?"rest":t==="call"?"call":mine(t)?"mine":"",i<TODAY?"past":"",i===TODAY?"today":""].join(" ");
+    const a=alloc(i);c+=`<div class="${cls}">${day(i).getDate()}${a.length?`<span class="dots">${a.map(v=>v==="-"?`<i class="o"></i>`:`<i style="background:${P[v]};box-shadow:0 0 6px ${P[v]}66"></i>`).join("")}</span>`:""}</div>`}
+    rows+=`<div class="row">${c}<span class="wkh">${weekH(w)}h</span></div>`}
+  document.getElementById("A").innerHTML=`<div class="top"><span class="brand">WYNDOW</span><span class="next"><i></i>Next chunk · today 11:00–15:00 · Snapval, Voisee</span></div>
+  <div class="body"><div><h3>October – November</h3>${dowRow()}${rows}</div>
+  <div class="panel"><div class="eb">Friday · 16 October</div><div class="big">Time off</div>
+   <div class="line dim"><span class="t">08:30</span><span></span><span>Math and Science, live</span><span class="h">2h15</span></div>
+   <div class="line"><span class="t">11:00</span><span class="d" style="background:${P.s}"></span><span>Snapval</span><span class="h">2h</span></div>
+   <div class="line"><span class="t">13:00</span><span class="d" style="background:${P.v}"></span><span>Voisee</span><span class="h">2h</span></div>
+   <div class="line dim"><span class="t">15:00</span><span></span><span>Small tasks</span><span class="h">1h</span></div>
+   <div class="line dim"><span class="t">17:00</span><span></span><span>Family</span><span class="h"></span></div>
+   <div class="note">Next: wire the upload flow to the scoring API (#18).</div>
+   <button class="btn">Start Snapval</button></div></div>`;
+})();
+
+/* Study B */
+(function(){
+  const P=PAL.B;let rows="";
+  for(let w=0;w<6;w++){let c="";for(let i=w*7;i<w*7+7;i++){const t=typ(i);const cls=["cell",t==="night"?"night":t==="call"?"call":mine(t)?"mine":"",i<TODAY?"past":"",i===TODAY?"today":""].join(" ");
+    const a=alloc(i);c+=`<div class="${cls}">${String(day(i).getDate()).padStart(2,"0")}${CODE[t]?`<span class="code">${CODE[t]}</span>`:""}${a.length?`<span class="bars">${a.map(v=>v==="-"?`<i class="o"></i>`:`<i style="background:${P[v]};box-shadow:0 0 8px ${P[v]}"></i>`).join("")}</span>`:""}</div>`}
+    rows+=`<div class="row">${c}<span class="wkh">${weekH(w)}H</span></div>`}
+  document.getElementById("B").innerHTML=`<div class="screen"><div class="top"><span class="brand">WYNDOW</span><span class="next">NEXT CHUNK ▸ TODAY 11:00–15:00</span></div>
+  <div class="body"><div><div class="lab">Season · 12 Oct — 22 Nov</div>${dowRow()}${rows}</div>
+  <div><div class="lab">Fri 16 Oct · Time off</div><div class="readout">11:00</div><div class="sub" style="color:${P.s}">Snapval · 2 blocks</div>
+   <div style="margin-top:18px">
+   <div class="line"><span class="t">08:30</span><span>MATH, SCIENCE · LIVE</span><span>2:15</span></div>
+   <div class="line"><span class="t">11:00</span><span style="color:${P.s}">SNAPVAL</span><span>2:00</span></div>
+   <div class="line"><span class="t">13:00</span><span style="color:${P.v}">VOISEE</span><span>2:00</span></div>
+   <div class="line"><span class="t">15:00</span><span>SMALL TASKS</span><span>1:00</span></div>
+   <div class="line"><span class="t">17:00</span><span>FAMILY</span><span></span></div></div>
+   <div class="note">&gt; next: wire the upload flow to the scoring API (#18)</div>
+   <button class="btn">START SESSION</button></div></div></div>`;
+})();
+
+/* Study C */
+(function(){
+  const P=PAL.C;let rows="";
+  const seg=(a,b,style)=>`<span class="seg" style="top:${a/24*100}%;height:${(b-a)/24*100}%;${style}"></span>`;
+  for(let w=0;w<6;w++){let c="";for(let i=w*7;i<w*7+7;i++){
+    let s=shiftSegs(i).map(([a,b,k])=>seg(a,b,k==="work"?"background:#15181B":k==="rest"?"background:#D3D7DB":"background:transparent;box-shadow:inset 0 0 0 1.5px #15181B")).join("");
+    const f=focusWin(i);if(f){alloc(i).forEach((v,j)=>{const a=f[0]+j*2;s+=seg(a,a+2,v==="-"?"box-shadow:inset 0 0 0 1px #9AA0A6":`background:${P[v]}`)})}
+    c+=`<div class="col ${i<TODAY?"past":""} ${i===TODAY?"today":""}"><span class="n">${day(i).getDate()}</span><span class="cap">${s}</span></div>`}
+    rows+=`<div class="row">${c}<span class="wkh">${weekH(w)}h</span></div>`}
+  document.getElementById("C").innerHTML=`<div class="top"><span class="brand">Wyndow</span><span class="next">Next chunk <b>today, 11:00–15:00</b></span></div>
+  <div class="body"><div>${dowRow()}${rows}
+   <div class="key"><span><i style="background:#15181B"></i>Shift</span><span><i style="background:#D3D7DB"></i>Recovery</span><span><i style="background:${P.s}"></i>Snapval</span><span><i style="background:${P.v}"></i>Voisee</span><span><i style="background:${P.f}"></i>Family</span><span>Each bar is one day, midnight at top</span></div></div>
+  <div><div class="date">16</div><div class="dname">Friday, time off</div>
+   <div class="line"><span class="t">08:30</span><span style="color:#7A8188">Math and Science, live</span><span class="h"></span></div>
+   <div class="line"><span class="t">11:00</span><span><span style="color:${P.s}">●</span> Snapval</span><span class="h">2h</span></div>
+   <div class="line"><span class="t">13:00</span><span><span style="color:${P.v}">●</span> Voisee</span><span class="h">2h</span></div>
+   <div class="line"><span class="t">15:00</span><span style="color:#7A8188">Small tasks</span><span class="h">1h</span></div>
+   <div class="note">Next: wire the upload flow to the scoring API (#18).</div>
+   <button class="btn">Start session →</button></div></div>`;
+})();
+
+/* Studies D and E: one renderer, two palettes */
+const KP={
+  D:{outer:"#E8EBED",screen:"#0A0E13",edge:"#1A2430",brand:"#DCE6EC",lab:"#5D7383",text:"#93A8B6",dim:"#4F6372",num:"#3F505D",numMine:"#C9D8E2",track:"#D3DAE0",grid:"#141D26",shift:"#1E262E",rest:"#4E5A66",call:"#1E262E",capring:"#3A4753",open:"#7B8D9C",ring:"#5991C5",line:"#16202A",btnBg:"#E8EBED",btnFg:"#0A0E13",s:"#5991C5",v:"#FFB547",f:"#B59CFF",readout:"#E6ECF0",hal:"#AB0618",glow:true},
+  E:{capring:"transparent",readout:"#1E8BCB",hal:"#AB0618",outer:"#E9EDF0",screen:"#FFFFFF",edge:"#DFE5EA",brand:"#0F1418",lab:"#8796A2",text:"#3E4A54",dim:"#9AA7B1",num:"#A9B4BD",numMine:"#0F1418",track:"#F0F3F5",grid:"#EDF0F3",shift:"#2A333B",rest:"#C9D1D8",call:"#2A333B",open:"#A9B5BF",ring:"#0F1418",line:"#EDF0F3",btnBg:"#0F1418",btnFg:"#FFFFFF",s:"#1E8BCB",v:"#D38D14",f:"#8A6ED3",glow:false}
+};
+function renderK(id){
+  const P=KP[id];const el=document.getElementById(id);
+  const vars=Object.entries(P).filter(([k])=>k!=="glow").map(([k,v])=>`--${k}:${v}`).join(";");
+  el.setAttribute("style",vars+";"+(P.glow?`--glowtxt:0 0 10px ${P.s}88;--glowbig:0 0 22px rgba(230,236,240,.35);--glowring:0 0 12px ${P.ring}88;--glowhal:0 0 8px ${P.hal},0 0 18px ${P.hal}99`:`--glowtxt:none;--glowbig:none;--glowring:none;--glowhal:none`));
+  const glow=c=>P.glow?`;box-shadow:0 0 6px ${c}aa`:"";
+  const seg=(a,b,style)=>`<span class="seg" style="top:${a/24*100}%;height:${(b-a)/24*100}%;${style}"></span>`;
+  const hseg=(a,b,style)=>`<span class="seg" style="top:0;bottom:0;left:${a/24*100}%;width:${(b-a)/24*100}%;right:auto;${style}"></span>`;
+  let rows="";
+  for(let w=0;w<6;w++){let c="";
+    for(let i=w*7;i<w*7+7;i++){const t=typ(i);
+      let s=shiftSegs(i).map(([a,b,k])=>seg(a,b,k==="work"?`background:${P.shift}`:k==="rest"?`background:${P.rest}`:`box-shadow:inset 0 0 0 1.5px ${P.call}`)).join("");
+      const fw=focusWin(i);if(fw)alloc(i).forEach((v,j)=>{const a=fw[0]+j*2;s+=seg(a,a+2,v==="-"?`box-shadow:inset 0 0 0 1px ${P.open}`:`background:${P[v]}${glow(P[v])}`)});
+      c+=`<div class="col ${mine(t)?"mine":""} ${i<TODAY?"past":""} ${i===TODAY?"today":""}"><span class="cap">${s}</span><span class="n">${String(day(i).getDate()).padStart(2,"0")}</span></div>`}
+    rows+=`<div class="row"><span class="gl" style="top:calc(var(--caph)*.25)"></span><span class="gl" style="top:calc(var(--caph)*.5)"></span><span class="gl" style="top:calc(var(--caph)*.75)"></span>${c}<span class="wkh">${weekH(w)}H</span></div>`}
+  const today=[hseg(8.5,10.75,`box-shadow:inset 0 0 0 1px ${P.dim}`),hseg(11,13,`background:${P.s}${glow(P.s)}`),hseg(13,15,`background:${P.v}${glow(P.v)}`),hseg(15,16,`box-shadow:inset 0 0 0 1px ${P.open}`),hseg(17,22,`background:${P.f};opacity:.45`),hseg(10.33,10.42,`background:${P.hal};box-shadow:0 0 6px ${P.hal}`)].join("");
+  el.innerHTML=`<div class="screen"><div class="top"><span class="brand" aria-label="Wyndow">WYND<span class="hal">O</span>W</span><span class="next">NEXT CHUNK ▸ TODAY 11:00–15:00</span></div>
+  <div class="body"><div><div class="lab">Season · 12 Oct — 22 Nov</div>${dowRow()}${rows}
+    <div class="axis"><span><i style="background:${P.shift}"></i>Shift</span><span><i style="background:${P.rest}"></i>Recovery</span><span><i style="box-shadow:inset 0 0 0 1.5px ${P.call}"></i>On call</span><span><i style="background:${P.s}"></i>Snapval</span><span><i style="background:${P.v}"></i>Voisee</span><span><i style="background:${P.f}"></i>Family</span><span><i style="box-shadow:inset 0 0 0 1px ${P.open}"></i>Open block</span><span><i style="background:${P.track}"></i>Free</span><span>Lines at 06 · 12 · 18</span></div></div>
+  <div><div class="lab">Fri 16 Oct · Time off</div><div class="readout">11:00</div><div class="sub">Snapval · 2 blocks → 13:00</div>
+   <div class="dbar">${today}</div><div class="ticks"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
+   <div class="line"><span class="t">08:30</span><span>MATH, SCIENCE · LIVE</span><span>2:15</span></div>
+   <div class="line"><span class="t">11:00</span><span style="color:${P.s}">SNAPVAL</span><span>2:00</span></div>
+   <div class="line"><span class="t">13:00</span><span style="color:${P.v}">VOISEE</span><span>2:00</span></div>
+   <div class="line"><span class="t">15:00</span><span>SMALL TASKS</span><span>1:00</span></div>
+   <div class="line"><span class="t">17:00</span><span>FAMILY</span><span></span></div>
+   <div class="note">&gt; next: wire the upload flow to the scoring API (#18)</div>
+   <button class="btn">START SESSION</button></div></div></div>`;
+}
+renderK("D");renderK("E");
+</script>
