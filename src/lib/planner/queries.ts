@@ -1,6 +1,6 @@
 // Questions the UI asks of the planned days and block allocations.
 import { blockWindow, fitAllocation } from './blocks';
-import { addDays, mondayOf } from './dates';
+import { addDays, weekStartOf } from './dates';
 import type {
 	Allocations,
 	Chunk,
@@ -185,10 +185,10 @@ export function suggestStretches(input: SuggestInput): Allocations {
 	return out;
 }
 
-/** Total focus hours across the seven days starting at `monday`. */
-export function weekFocusHours(days: Days, monday: LocalDate): number {
+/** Total focus hours across the Sunday-to-Saturday week containing `date`. */
+export function weekFocusHours(days: Days, date: LocalDate): number {
 	let total = 0;
-	for (let i = 0; i < 7; i++) total += days.get(addDays(mondayOf(monday), i))?.focusHours ?? 0;
+	for (let i = 0; i < 7; i++) total += days.get(addDays(weekStartOf(date), i))?.focusHours ?? 0;
 	return total;
 }
 

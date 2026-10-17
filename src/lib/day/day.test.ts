@@ -6,7 +6,7 @@ import { elapsedMinutes, isValidDayParam, longDate, nextChunkLabel, packetNeeds,
 import { buildTimeline, dayReadout, lessonStart } from './timeline';
 
 const proj = (id: string, name: string, area: Project['area'] = 'venture'): Project => ({
-	id, name, color: '#112233', area, githubRepo: null, milestone: null, blocksDone: 0, archived: false, sort: 0
+	id, name, color: '#112233', area, githubRepo: null, githubMilestone: null, milestone: null, blocksDone: 0, archived: false, sort: 0
 });
 const cls = (id: string, name: string, ready: number): SchoolClass => ({
 	id, name, student: 'Older', wyrkbookRef: null, currentUnit: null, packetsReady: ready, sort: 0

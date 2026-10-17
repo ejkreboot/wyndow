@@ -83,6 +83,7 @@ export function toProject(r: Row<'projects'>): Project {
 		color: r.color,
 		area: r.area as Project['area'],
 		githubRepo: r.github_repo,
+		githubMilestone: r.github_milestone,
 		milestone: r.milestone,
 		blocksDone: r.blocks_done,
 		archived: r.archived,

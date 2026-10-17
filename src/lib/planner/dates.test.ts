@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addDays, diffDays, eachDate, formatTime, instantFromZoned, mondayOf, parseTime, todayIn, weekdayOf, zonedParts } from './dates';
+import { addDays, diffDays, eachDate, formatTime, instantFromZoned, parseTime, todayIn, weekStartOf, weekdayOf, zonedParts } from './dates';
 
 describe('date arithmetic', () => {
 	it('adds days across month and year boundaries', () => {
@@ -20,10 +20,11 @@ describe('date arithmetic', () => {
 		expect(eachDate('2026-10-30', '2026-11-02')).toEqual(['2026-10-30', '2026-10-31', '2026-11-01', '2026-11-02']);
 		expect(eachDate('2026-10-02', '2026-10-01')).toEqual([]);
 	});
-	it('mondayOf finds the Monday on or before', () => {
-		expect(mondayOf('2026-10-19')).toBe('2026-10-19');
-		expect(mondayOf('2026-10-18')).toBe('2026-10-12');
-		expect(mondayOf('2026-10-16')).toBe('2026-10-12');
+	it('weekStartOf finds the Sunday on or before', () => {
+		expect(weekStartOf('2026-10-18')).toBe('2026-10-18'); // Sunday
+		expect(weekStartOf('2026-10-19')).toBe('2026-10-18'); // Monday
+		expect(weekStartOf('2026-10-17')).toBe('2026-10-11'); // Saturday
+		expect(weekStartOf('2026-11-01')).toBe('2026-11-01');
 	});
 });
 

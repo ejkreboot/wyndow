@@ -63,6 +63,7 @@ export interface Project {
 	color: string; // '#RRGGBB'
 	area: ProjectArea;
 	githubRepo: string | null; // 'owner/name'
+	githubMilestone: number | null; // GitHub milestone number in githubRepo
 	milestone: string | null;
 	blocksDone: number;
 	archived: boolean;

@@ -239,10 +239,12 @@ describe('suggestStretches', () => {
 });
 
 describe('week helpers', () => {
-	it('sums focus hours across the Monday-Sunday week', () => {
-		const days = openWeek();
-		expect(weekFocusHours(days, '2026-10-19')).toBe(5 * 4 + 2 * 2);
-		expect(weekFocusHours(days, '2026-10-26')).toBe(0);
+	it('sums focus hours across the Sunday-Saturday week', () => {
+		const days = openWeek(); // Mon 19 .. Sun 25
+		expect(weekFocusHours(days, '2026-10-19')).toBe(5 * 4 + 2); // Sun 18 (not built) .. Sat 24
+		expect(weekFocusHours(days, '2026-10-24')).toBe(5 * 4 + 2);
+		expect(weekFocusHours(days, '2026-10-25')).toBe(2); // Sun 25 starts the next week
+		expect(weekFocusHours(days, '2026-11-01')).toBe(0);
 	});
 	it('classifies weeks by thresholds', () => {
 		expect(weekMode(24)).toBe('sprint');

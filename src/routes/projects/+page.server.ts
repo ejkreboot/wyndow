@@ -6,7 +6,7 @@ import type { Forecast, LocalDate, Project, SchoolClass, SchoolMode } from '$lib
 import { REPO_PATTERN, type Issue } from '$lib/projects/issues';
 import * as repo from '$lib/server/db';
 import { loadPlannerContext } from '$lib/server/context';
-import { listOpenIssues } from '$lib/server/github';
+import { listIssues, listMilestones } from '$lib/server/github';
 import { todayIn } from '$lib/planner/dates';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -19,6 +19,8 @@ export type IssuesState =
 export interface VentureView {
 	project: Project;
 	issues: IssuesState;
+	/** Linked GitHub milestone title, when the project has one. */
+	milestoneTitle: string | null;
 	remaining: number;
 	done: number;
 	forecast: Forecast;
@@ -44,20 +46,32 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 		const ventures = all.filter((p) => p.area === 'venture' && !p.archived);
 		const results = await Promise.all(
-			ventures.map(async (p): Promise<IssuesState> => {
-				if (!p.githubRepo) return { status: 'none' };
-				return listOpenIssues(p.githubRepo);
+			ventures.map(async (p): Promise<{ issues: IssuesState; milestoneTitle: string | null; done: number | null }> => {
+				if (!p.githubRepo) return { issues: { status: 'none' }, milestoneTitle: null, done: null };
+				if (!p.githubMilestone) return { issues: await listIssues(p.githubRepo), milestoneTitle: null, done: null };
+				// Linked milestone: progress comes from its issues, and done is derived from closed ones.
+				const [all, ms] = await Promise.all([
+					listIssues(p.githubRepo, { state: 'all', milestone: p.githubMilestone }),
+					listMilestones(p.githubRepo)
+				]);
+				const milestoneTitle = ms.status === 'ok' ? (ms.milestones.find((m) => m.number === p.githubMilestone)?.title ?? null) : null;
+				if (all.status !== 'ok') return { issues: all, milestoneTitle, done: null };
+				const done = all.issues
+					.filter((x) => x.state === 'closed' && x.stateReason !== 'not_planned')
+					.reduce((n, x) => n + x.size, 0);
+				return { issues: { status: 'ok', issues: all.issues.filter((x) => x.state === 'open') }, milestoneTitle, done };
 			})
 		);
 
 		const ventureViews: VentureView[] = ventures.map((project, i) => {
-			const issues = results[i];
+			const { issues, milestoneTitle, done } = results[i];
 			const remaining = issues.status === 'ok' ? issues.issues.reduce((n, x) => n + x.size, 0) : 0;
 			return {
 				project,
 				issues,
+				milestoneTitle,
 				remaining,
-				done: project.blocksDone,
+				done: done ?? project.blocksDone,
 				forecast: forecast({
 					projectId: project.id,
 					remainingBlocks: remaining,
@@ -116,7 +130,7 @@ const createProjectSchema = z.object(projectFields);
 const updateProjectSchema = z.object({
 	id: uuid,
 	...projectFields,
-	blocksDone: z.coerce.number().int('Blocks done must be a whole number.').min(0).max(10000, 'Blocks done is too large.')
+	blocksDone: z.coerce.number().int('Blocks done must be a whole number.').min(0).max(10000, 'Blocks done is too large.').optional()
 });
 const archiveSchema = z.object({ id: uuid, archived: z.enum(['true', 'false']) });
 

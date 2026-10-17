@@ -70,7 +70,7 @@
 			<input name="githubRepo" maxlength="140" placeholder="owner/name" value={p?.githubRepo ?? ''} /></label>
 		<label class="field"><span class="label">Milestone</span>
 			<input name="milestone" maxlength="120" value={p?.milestone ?? ''} /></label>
-		{#if edit}
+		{#if edit && !p?.githubMilestone}
 			<label class="field"><span class="label">Blocks done</span>
 				<input type="number" name="blocksDone" min="0" max="10000" step="1" value={p?.blocksDone ?? 0} /></label>
 		{/if}
@@ -165,7 +165,8 @@
 				<div class="projects-card-head">
 					<div>
 						<p class="label">{p.githubRepo ? `GitHub · ${p.githubRepo}` : 'No GitHub repo'}</p>
-						<h3 class="projects-name"><Swatch color={p.color} /> {p.name}</h3>
+						<h3 class="projects-name"><Swatch color={p.color} />
+							{#if p.githubRepo}<a href="/projects/{p.id}">{p.name}</a>{:else}{p.name}{/if}</h3>
 					</div>
 					{#if v.remaining === 0 && v.issues.status === 'ok'}
 						<span class="chip">Nothing left</span>
@@ -176,10 +177,13 @@
 					{/if}
 				</div>
 				<p class="projects-progress-text">
-					{#if p.milestone}<strong>{p.milestone}</strong> <span class="dim">· </span>{/if}
+					{#if v.milestoneTitle ?? p.milestone}<strong>{v.milestoneTitle ?? p.milestone}</strong> <span class="dim">· </span>{/if}
 					<span class="dim mono">{v.done} of {v.done + v.remaining} blocks done · {v.remaining} left ({v.remaining * data.blockHours}h)</span>
 				</p>
 				<div class="projects-bar" role="img" aria-label="{Math.round(pct(v))} percent done"><i style="width: {pct(v)}%"></i></div>
+				{#if p.githubRepo}
+					<p><a class="btn-ghost" href="/projects/{p.id}">Board and burndown</a></p>
+				{/if}
 				{#if v.note}
 					<div class="projects-resume"><p class="label">Where you left off</p><p>{v.note}</p></div>
 				{/if}

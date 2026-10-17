@@ -2,8 +2,8 @@ import type { Project } from '$lib/planner/types';
 import { toProject } from './mappers';
 import { fail, type Db, type Update } from './types';
 
-export type ProjectInput = Omit<Project, 'id' | 'blocksDone' | 'archived' | 'sort'> &
-	Partial<Pick<Project, 'blocksDone' | 'archived' | 'sort'>>;
+export type ProjectInput = Omit<Project, 'id' | 'blocksDone' | 'archived' | 'sort' | 'githubMilestone'> &
+	Partial<Pick<Project, 'blocksDone' | 'archived' | 'sort' | 'githubMilestone'>>;
 
 function toRow(p: Partial<ProjectInput>) {
 	const row: Update<'projects'> = {};
@@ -11,6 +11,7 @@ function toRow(p: Partial<ProjectInput>) {
 	if (p.color !== undefined) row.color = p.color;
 	if (p.area !== undefined) row.area = p.area;
 	if (p.githubRepo !== undefined) row.github_repo = p.githubRepo;
+	if (p.githubMilestone !== undefined) row.github_milestone = p.githubMilestone;
 	if (p.milestone !== undefined) row.milestone = p.milestone;
 	if (p.blocksDone !== undefined) row.blocks_done = p.blocksDone;
 	if (p.archived !== undefined) row.archived = p.archived;
@@ -45,4 +46,10 @@ export async function updateProject(db: Db, id: string, patch: Partial<ProjectIn
 export async function deleteProject(db: Db, id: string): Promise<void> {
 	const { error } = await db.from('projects').delete().eq('id', id);
 	if (error) fail('Could not delete project', error);
+}
+
+export async function getProject(db: Db, id: string): Promise<Project | null> {
+	const { data, error } = await db.from('projects').select('*').eq('id', id).maybeSingle();
+	if (error) fail('Could not load project', error);
+	return data ? toProject(data) : null;
 }

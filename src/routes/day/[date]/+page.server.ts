@@ -5,6 +5,7 @@ import { buildTimeline, dayReadout } from '$lib/day/timeline';
 import { isValidDayParam, packetNeeds } from '$lib/day/format';
 import { addDays, allocationSpans, asyncDaysAhead, fitAllocation, todayIn } from '$lib/planner';
 import { loadPlannerContext } from '$lib/server/context';
+import { listIssues } from '$lib/server/github';
 import {
 	activeSession,
 	endSession,
@@ -59,6 +60,24 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			settings: ctx.settings,
 			familyIds: ctx.familyIds
 		});
+		// "Doing" cards from GitHub for the projects in today's focus blocks and the running session.
+		const doingIds = new Set(timeline.flatMap((i) => (i.card.type === 'focus' ? [i.card.projectId] : [])));
+		if (session) doingIds.add(session.projectId);
+		const doingEntries = await Promise.all(
+			[...doingIds].map(async (id) => {
+				const project = ctx.projects.find((p) => p.id === id);
+				if (!project?.githubRepo) return null;
+				const r = await listIssues(project.githubRepo, project.githubMilestone ? { state: 'all', milestone: project.githubMilestone } : {});
+				if (r.status !== 'ok') return null;
+				const doing = r.issues
+					.filter((i) => i.state === 'open' && i.status === 'doing')
+					.slice(0, 5)
+					.map((i) => ({ number: i.number, title: i.title, url: i.url }));
+				return [id, doing] as const;
+			})
+		);
+		const doing = Object.fromEntries(doingEntries.filter((e) => e !== null && e[1].length > 0) as (readonly [string, { number: number; title: string; url: string }[]])[]);
+
 		const readout = dayReadout(day, ctx.projects, ctx.allocations, ctx.settings, ctx.familyIds, isToday ? ctx.nowMinutes : null);
 
 		const asyncDays = asyncDaysAhead(ctx.days, today, 10);
@@ -95,6 +114,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			readout,
 			timeline,
 			notes,
+			doing,
 			session: session
 				? { id: session.id, projectId: session.projectId, startedAt: session.startedAt }
 				: null,

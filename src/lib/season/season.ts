@@ -1,5 +1,5 @@
 // Pure helpers for the Season view (no I/O).
-import { addDays, mondayOf, weekdayOf } from '$lib/planner/dates';
+import { addDays, weekStartOf, weekdayOf } from '$lib/planner/dates';
 import type { Allocation, LocalDate } from '$lib/planner/types';
 
 export const WEEKS_BEFORE = 4;
@@ -7,10 +7,10 @@ export const WEEKS_AFTER = 30;
 export const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 export const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** Monday four weeks before today through the Sunday thirty weeks after today. */
+/** Sunday four weeks before today through the Saturday thirty weeks after today. */
 export function seasonRange(today: LocalDate): { from: LocalDate; to: LocalDate } {
-	const monday = mondayOf(today);
-	return { from: addDays(monday, -7 * WEEKS_BEFORE), to: addDays(monday, 7 * WEEKS_AFTER + 6) };
+	const start = weekStartOf(today);
+	return { from: addDays(start, -7 * WEEKS_BEFORE), to: addDays(start, 7 * WEEKS_AFTER + 6) };
 }
 
 /** True for a real calendar date in YYYY-MM-DD form. */
@@ -25,22 +25,22 @@ export function inRange(d: LocalDate, range: { from: LocalDate; to: LocalDate })
 	return isValidDate(d) && d >= range.from && d <= range.to;
 }
 
-/** Mondays of every week row in the range. */
-export function weekMondays(range: { from: LocalDate; to: LocalDate }): LocalDate[] {
+/** Sundays starting every week row in the range. */
+export function weekStarts(range: { from: LocalDate; to: LocalDate }): LocalDate[] {
 	const out: LocalDate[] = [];
-	for (let m = mondayOf(range.from); m <= range.to; m = addDays(m, 7)) out.push(m);
+	for (let s = weekStartOf(range.from); s <= range.to; s = addDays(s, 7)) out.push(s);
 	return out;
 }
 
 /**
  * Months ('YYYY-MM') whose heading belongs above a week row: any month that starts inside the
- * week, plus the Monday's month on the first row.
+ * week, plus the week start's month on the first row.
  */
-export function weekHeadings(monday: LocalDate, first: boolean): string[] {
+export function weekHeadings(start: LocalDate, first: boolean): string[] {
 	const out: string[] = [];
-	if (first) out.push(monday.slice(0, 7));
+	if (first) out.push(start.slice(0, 7));
 	for (let i = 0; i < 7; i++) {
-		const d = addDays(monday, i);
+		const d = addDays(start, i);
 		if (d.endsWith('-01') && !out.includes(d.slice(0, 7))) out.push(d.slice(0, 7));
 	}
 	return out;

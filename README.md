@@ -11,11 +11,21 @@ SvelteKit 2 (Svelte 5, TypeScript) on Vercel, Supabase (schema `wyndow`) for aut
    - `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`
    - `ALLOWED_EMAILS` — comma-separated emails allowed to sign in (the app refuses to start without it)
    - `CRON_SECRET` — at least 16 characters; Vercel cron sends it as a bearer token
-   - `GITHUB_TOKEN` — optional fine-grained token with read access to issues on your venture repos
+   - `GITHUB_TOKEN` — optional fine-grained token on your venture repos with *Issues: read and write* (and *Metadata: read*)
 3. Supabase dashboard (Dev project):
    - *Settings → Data API → Exposed schemas*: add `wyndow`.
    - *Authentication → Users*: make sure your allowed email has a password user.
 4. `npm run dev`, sign in, then in **Settings** add your calendar feed (ICS URL) and assign kinds to the event titles in the inbox.
+
+## Project boards
+
+Ventures with a GitHub repo get a board page (`/projects/<id>`). GitHub stays the source of truth:
+
+- **Milestone** — link an existing GitHub milestone or create one from Wyndow; its due date drives the burndown.
+- **Board** — Backlog (open, no status label), Next (`status:next`), Doing (`status:doing`), Done (closed). Moving a card edits the labels or closes/reopens the issue. "Won't do" closes as *not planned*, which removes the work from scope.
+- **Sizes** — `size:N` labels (blocks, default 1); `deep` / `shallow` mark depth. Wyndow creates its labels on first use and leaves every other label alone.
+- **Burndown** — blocks left per day since the milestone was created, with a projected line that follows the blocks painted for the project on the Season view.
+- The Day view lists a project's Doing cards on its focus blocks and on a running session.
 
 ## Database
 

@@ -1122,6 +1122,21 @@ textarea:disabled {
 	}
 }
 
+.day-doing {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+.day-doing ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	overflow-wrap: anywhere;
+}
+
 /* ===== projects ===== (owner: projects) */
 .projects {
 	display: flex;
@@ -1302,6 +1317,246 @@ textarea:disabled {
 	font-size: var(--fs-body);
 }
 
+
+/* projects: board page (milestone, burndown, kanban) */
+.projects-board-wide {
+	grid-column: 1 / -1;
+}
+.projects-board-milestone {
+	margin: 4px 0;
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	font: 300 var(--fs-title) var(--f-geo);
+	color: var(--text-bright);
+	overflow-wrap: anywhere;
+}
+.projects-board-milestone a {
+	color: inherit;
+}
+.projects-board-desc {
+	margin: var(--space-2) 0 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+.projects-board-link {
+	flex: 1 1 220px;
+}
+.projects-board-note {
+	margin: 0;
+	font-size: var(--fs-small);
+}
+.projects-board {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: var(--space-3);
+	align-items: start;
+}
+.projects-board-col {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+	min-width: 0;
+	padding: var(--space-3);
+	border-radius: 12px;
+	background: var(--screen-raised);
+	box-shadow: inset 0 0 0 1px var(--edge);
+}
+.projects-board-col-head {
+	margin: 0;
+	display: flex;
+	justify-content: space-between;
+	gap: var(--space-2);
+}
+.projects-board-empty {
+	margin: 0;
+	font-size: var(--fs-small);
+}
+.projects-board-cards {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+}
+.projects-board-card {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+	padding: var(--space-3);
+	border-radius: 8px;
+	background: var(--screen);
+	box-shadow: inset 0 0 0 1px var(--edge);
+	min-width: 0;
+}
+.projects-board-dropped {
+	opacity: 0.6;
+}
+.projects-board-title {
+	margin: 0;
+	color: var(--text-bright);
+	overflow-wrap: anywhere;
+}
+.projects-board-meta,
+.projects-board-moves {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+.projects-board-moves {
+	justify-content: space-between;
+}
+@media (max-width: 900px) {
+	/* Columns become a strip that scrolls inside the board, never the page. */
+	.projects-board {
+		grid-template-columns: repeat(4, minmax(240px, 80%));
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		padding-bottom: var(--space-2);
+	}
+	.projects-board-col {
+		scroll-snap-align: start;
+	}
+}
+
+/* projects: burndown chart */
+.burn {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+	min-width: 0;
+}
+.burn-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2) var(--space-4);
+	font-size: var(--fs-small);
+	color: var(--text);
+}
+.burn-key {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.burn-key-line {
+	display: inline-block;
+	width: 16px;
+	height: 0;
+	border-top: 2px solid var(--c);
+}
+.burn-key-projected {
+	border-top-style: dashed;
+}
+.burn-key-scope {
+	border-top-color: var(--text-dim);
+}
+.burn-key-due {
+	display: inline-block;
+	width: 0;
+	height: 12px;
+	border-left: 2px solid var(--hal-red);
+}
+.burn-plot {
+	position: relative;
+	min-width: 0;
+}
+.burn-plot svg {
+	display: block;
+	touch-action: pan-y;
+}
+.burn-grid {
+	stroke: var(--grid);
+	stroke-width: 1;
+}
+.burn-tick {
+	fill: var(--text-dim);
+	font: 400 10px var(--f-mono);
+	font-variant-numeric: tabular-nums;
+}
+.burn-today {
+	stroke: var(--text-label);
+	stroke-width: 1;
+}
+.burn-due {
+	stroke: var(--hal-red);
+	stroke-width: 2;
+}
+.burn-scope {
+	fill: none;
+	stroke: var(--text-dim);
+	stroke-width: 2;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+.burn-area {
+	fill: color-mix(in srgb, var(--c) 10%, transparent);
+}
+.burn-actual,
+.burn-projected {
+	fill: none;
+	stroke: var(--c);
+	stroke-width: 2;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+.burn-projected {
+	stroke-dasharray: 5 4;
+	opacity: 0.8;
+}
+.burn-dot {
+	fill: var(--c);
+	stroke: var(--screen-raised);
+	stroke-width: 2;
+}
+.burn-cross {
+	stroke: var(--text-label);
+	stroke-width: 1;
+}
+.burn-tip {
+	position: absolute;
+	top: 4px;
+	transform: translateX(10px);
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 6px 10px;
+	border-radius: 8px;
+	background: var(--screen);
+	box-shadow: inset 0 0 0 1px var(--edge);
+	font-size: var(--fs-small);
+	color: var(--text);
+	white-space: nowrap;
+	pointer-events: none;
+}
+.burn-tip strong {
+	color: var(--text-bright);
+	font-weight: 400;
+}
+.burn-tip-flip {
+	transform: translateX(calc(-100% - 10px));
+}
+.burn-table summary {
+	cursor: pointer;
+}
+.burn-table table {
+	width: 100%;
+	margin-top: var(--space-2);
+	border-collapse: collapse;
+	font-size: var(--fs-small);
+}
+.burn-table th,
+.burn-table td {
+	padding: 4px 8px 4px 0;
+	text-align: left;
+	border-top: 1px solid var(--line);
+}
+.burn-table th {
+	color: var(--text-label);
+	font-weight: 400;
+}
 
 /* ===== settings ===== (owner: settings) */
 .settings {

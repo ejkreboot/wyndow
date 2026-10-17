@@ -247,6 +247,7 @@ export type Database = {
           area: string
           blocks_done: number
           color: string
+          github_milestone: number | null
           github_repo: string | null
           id: string
           milestone: string | null
@@ -259,6 +260,7 @@ export type Database = {
           area: string
           blocks_done?: number
           color: string
+          github_milestone?: number | null
           github_repo?: string | null
           id?: string
           milestone?: string | null
@@ -271,6 +273,7 @@ export type Database = {
           area?: string
           blocks_done?: number
           color?: string
+          github_milestone?: number | null
           github_repo?: string | null
           id?: string
           milestone?: string | null

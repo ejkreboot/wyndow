@@ -43,6 +43,20 @@
 
 <svelte:head><title>{longDate(data.date)} · Wyndow</title></svelte:head>
 
+{#snippet doingList(projectId: string)}
+	{@const items = data.doing[projectId]}
+	{#if items}
+		<div class="day-doing">
+			<p class="label">Doing on the <a href="/projects/{projectId}">board</a></p>
+			<ul>
+				{#each items as i (i.number)}
+					<li><a class="mono" href={i.url} target="_blank" rel="noopener noreferrer">#{i.number}</a> {i.title}</li>
+				{/each}
+			</ul>
+		</div>
+	{/if}
+{/snippet}
+
 {#snippet stopControls()}
 	{#if running}
 		{#if !stopping}
@@ -126,6 +140,7 @@
 		{#if running && !shownOnPage}
 			<section class="panel day-card day-card-running" style="--c: var(--hal-blue)">
 				<h2 class="day-card-title">Session running: {data.sessionProjectName}</h2>
+				{@render doingList(running.projectId)}
 				<div class="day-actions">{@render stopControls()}</div>
 			</section>
 		{/if}
@@ -192,6 +207,7 @@
 									<p class="label">Where you left off</p>
 									<p>{data.notes[c.projectId] ?? 'No note yet.'}</p>
 								</div>
+								{@render doingList(c.projectId)}
 								<div class="day-actions">
 									{#if isRunning}
 										{@render stopControls()}

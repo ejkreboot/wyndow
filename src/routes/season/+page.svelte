@@ -5,6 +5,7 @@
 	import DayBar from '$lib/components/DayBar.svelte';
 	import Swatch from '$lib/components/Swatch.svelte';
 	import {
+		addDays,
 		allocationSpans,
 		blockWindow,
 		findTime,
@@ -21,7 +22,7 @@
 		formatShort,
 		inRange,
 		weekHeadings,
-		weekMondays
+		weekStarts
 	} from '$lib/season/season';
 	import type { ActionData, PageData } from './$types';
 
@@ -79,16 +80,17 @@
 	}
 
 	const rows = $derived(
-		weekMondays(data.range).map((monday, i) => {
-			const hours = weekFocusHours(data.days, monday);
+		weekStarts(data.range).map((start, i) => {
+			const hours = weekFocusHours(data.days, start);
+			const end = addDays(start, 7);
 			const plans: DayPlan[] = [];
 			for (const [date, plan] of data.days) {
-				if (date >= monday && date < nextMonday(monday)) plans.push(plan);
+				if (date >= start && date < end) plans.push(plan);
 			}
 			plans.sort((a, b) => (a.date < b.date ? -1 : 1));
 			return {
-				monday,
-				headings: weekHeadings(monday, i === 0),
+				start,
+				headings: weekHeadings(start, i === 0),
 				hours,
 				mode: weekMode(hours),
 				days: plans
@@ -96,10 +98,6 @@
 		})
 	);
 
-	function nextMonday(monday: LocalDate): LocalDate {
-		const [y, m, d] = monday.split('-').map(Number);
-		return new Date(Date.UTC(y, m - 1, d + 7)).toISOString().slice(0, 10);
-	}
 
 	function onDayClick(e: MouseEvent, day: DayPlan) {
 		brushNote = null;
@@ -248,16 +246,16 @@
 			<div class="season-dow" aria-hidden="true">
 				<span></span>
 				<span class="season-dow-days">
-					{#each ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as d (d)}<span>{d}</span>{/each}
+					{#each ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as d (d)}<span>{d}</span>{/each}
 				</span>
 				<span></span>
 			</div>
-			{#each rows as row (row.monday)}
+			{#each rows as row (row.start)}
 				{#each row.headings as ym (ym)}
 					<h2 class="season-month">{formatMonth(ym)}</h2>
 				{/each}
 				<div class="season-week">
-					<span class="season-week-label mono dim">{formatShort(row.monday)}</span>
+					<span class="season-week-label mono dim">{formatShort(row.start)}</span>
 					<div class="season-days">
 						<span class="season-gl" style="--at: 0.25"></span>
 						<span class="season-gl" style="--at: 0.5"></span>

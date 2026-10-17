@@ -39,9 +39,9 @@ export function eachDate(from: LocalDate, to: LocalDate): LocalDate[] {
 	return out;
 }
 
-/** The Monday on or before the given date. */
-export function mondayOf(d: LocalDate): LocalDate {
-	return addDays(d, 1 - weekdayOf(d));
+/** The Sunday on or before the given date (weeks run Sunday to Saturday). */
+export function weekStartOf(d: LocalDate): LocalDate {
+	return addDays(d, -(weekdayOf(d) % 7));
 }
 
 const formatters = new Map<string, Intl.DateTimeFormat>();

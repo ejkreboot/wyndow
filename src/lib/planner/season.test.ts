@@ -129,11 +129,11 @@ describe('season from real schedule', () => {
 		expect(day('2026-08-20')).toMatchObject({ kindId: 'recovery' });
 	});
 
-	it('weeks classify as sprint or keep-alive', () => {
-		expect(weekFocusHours(days, '2026-10-12')).toBe(19);
-		expect(weekMode(weekFocusHours(days, '2026-10-12'))).toBe('sprint');
-		expect(weekFocusHours(days, '2026-10-19')).toBe(6);
-		expect(weekMode(weekFocusHours(days, '2026-10-19'))).toBe('keep-alive');
+	it('sums Sunday-to-Saturday weeks and classifies them', () => {
+		expect(weekFocusHours(days, '2026-10-11')).toBe(14);
+		expect(weekFocusHours(days, '2026-10-17')).toBe(14); // Saturday belongs to the same week
+		expect(weekFocusHours(days, '2026-10-18')).toBe(9);
+		expect(weekMode(weekFocusHours(days, '2026-10-11'))).toBe('steady');
 	});
 
 	it('next chunk from the Time off Friday is the whole 4h of blocks', () => {

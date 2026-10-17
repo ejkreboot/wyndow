@@ -185,10 +185,10 @@
 			<fieldset class="settings-days">
 				<legend class="label">School days</legend>
 				<div class="settings-daylist">
-					{#each WEEKDAY_LABELS as label, i (label)}
+					{#each WEEKDAY_LABELS as wd (wd.value)}
 						<label class="check">
-							<input type="checkbox" name="schoolDay" value={i + 1} checked={data.settings.schoolDays.includes((i + 1) as 1)} />
-							<span class="mono">{label}</span>
+							<input type="checkbox" name="schoolDay" value={wd.value} checked={data.settings.schoolDays.includes(wd.value)} />
+							<span class="mono">{wd.label}</span>
 						</label>
 					{/each}
 				</div>

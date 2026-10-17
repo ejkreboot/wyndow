@@ -39,7 +39,7 @@ Later phases (not now): health and workouts, quote of the day, finances, deeper 
 | `SUPABASE_SECRET_KEY` | `sb_secret_…`, cron routes only |
 | `ALLOWED_EMAILS` | Comma-separated sign-in allowlist |
 | `CRON_SECRET` | Bearer token Vercel cron sends |
-| `GITHUB_TOKEN` | Optional fine-grained read-only token for issues |
+| `GITHUB_TOKEN` | Optional fine-grained token, Issues: read and write (issues, labels, milestones) |
 
 Read them with `$env/dynamic/private` inside `src/lib/server/env.ts` only, which exports a typed, validated object.
 
@@ -54,7 +54,7 @@ Every table has `user_id uuid not null default auth.uid() references auth.users(
 - `calendar_sources` — `id`; `name text not null`; `ics_url text not null check (ics_url ~ '^https://')`; `last_synced_at timestamptz`; `last_error text`; `created_at`.
 - `calendar_events` — `id`; `source_id` (composite FK, on delete cascade); `uid text not null`; `title text not null`; `description text`; `starts_at timestamptz`; `ends_at timestamptz`; `all_day_start date`; `all_day_end date` (exclusive); `updated_at`; `unique (source_id, uid)`; check that either `starts_at` or `all_day_start` is set. Index on `(user_id, starts_at)` and `(user_id, all_day_start)`.
 - `rules` — `id`; `source_id uuid null` (composite FK, cascade); `match text not null default 'equals' check in ('equals','prefix')`; `pattern text not null check (length between 1 and 120)`; `kind_id uuid not null` (composite FK, on delete **cascade**, so deleting a kind returns its titles to the inbox); `priority int default 0`; unique `(user_id, source_id, match, pattern)` with nulls not distinct.
-- `projects` — `id`; `name text not null`; `color text not null` (hex check); `area text not null check in ('venture','family','homeschool')`; `github_repo text null check (github_repo ~ '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$')`; `milestone text`; `blocks_done int not null default 0 check (>= 0)`; `archived boolean default false`; `sort int default 0`.
+- `projects` — `id`; `name text not null`; `color text not null` (hex check); `area text not null check in ('venture','family','homeschool')`; `github_repo text null check (github_repo ~ '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$')`; `milestone text` (free text, for projects without a repo); `github_milestone int null check (> 0)` (linked GitHub milestone number, 0005); `blocks_done int not null default 0 check (>= 0)`; `archived boolean default false`; `sort int default 0`.
 - `block_allocations` — `user_id`; `day date`; `block_index smallint check (>= 0 and < 16)`; `project_id uuid not null` (composite FK, cascade); PK `(user_id, day, block_index)`.
 - `focus_sessions` — `id`; `project_id` (composite FK, cascade); `day date not null`; `started_at timestamptz not null default now()`; `ended_at timestamptz`; `note text check (length <= 2000)`. At most one open session per user: partial unique index on `(user_id) where ended_at is null`.
 - `classes` — `id`; `name text not null`; `student text not null`; `wyrkbook_ref text`; `current_unit text`; `packets_ready int not null default 0 check (>= 0)`; `sort int default 0`.
@@ -67,7 +67,7 @@ Every table has `user_id uuid not null default auth.uid() references auth.users(
 
 Pure TypeScript, no I/O, fully unit-tested. Types are in `src/lib/planner/types.ts` (the contract; do not change without coordinating). Modules and exports:
 
-- `dates.ts` — `addDays(d, n)`, `weekdayOf(d): IsoWeekday`, `eachDate(from, to)` (inclusive), `mondayOf(d)`, `todayIn(tz)`, `zonedParts(instant: Date, tz): { date: LocalDate; minutes: Minutes }`, `formatTime(m): 'HH:MM'`, `parseTime('HH:MM'): Minutes`.
+- `dates.ts` — `addDays(d, n)`, `weekdayOf(d): IsoWeekday`, `eachDate(from, to)` (inclusive), `weekStartOf(d)` (Sunday; weeks run Sunday to Saturday), `todayIn(tz)`, `zonedParts(instant: Date, tz): { date: LocalDate; minutes: Minutes }`, `formatTime(m): 'HH:MM'`, `parseTime('HH:MM'): Minutes`.
 - `rules.ts` — `matchRule(title, sourceId, rules): Rule | null`. Equals beats prefix; then higher priority; then longer pattern; source-specific beats global.
 - `days.ts` — `buildDays({ from, to, events, rules, kinds, settings }): Days`.
   - Each event is clipped onto every local date it touches (`DayEvent.startsToday` is true only on its start date). All-day events cover `[allDayStart, allDayEnd)`; a missing end means one day.
@@ -81,7 +81,7 @@ Pure TypeScript, no I/O, fully unit-tested. Types are in `src/lib/planner/types.
   - `findTime({ hours, projectId, by, from, days, allocations, settings, familyIds }): FindTimeResult` — blocks assigned to `projectId` first (any non-family project when `projectId` is null), then open blocks, earliest first, until `hours` is covered.
   - `forecast({ projectId, remainingBlocks, days, allocations, from }): Forecast`.
   - `suggestStretches({ days, from, to, ventureIds, familyId }): Allocations` — runs of consecutive days with blocks; a run with at least 3 blocks goes to the next venture in rotation; open-weekend days go to family.
-  - `weekFocusHours(days, monday)` and `weekMode(hours): 'sprint' | 'steady' | 'keep-alive'` (≥ 16 sprint, ≤ 6 keep-alive).
+  - `weekFocusHours(days, date)` (the Sunday-Saturday week containing `date`) and `weekMode(hours): 'sprint' | 'steady' | 'keep-alive'` (≥ 16 sprint, ≤ 6 keep-alive).
   - `schoolDaysAhead(days, from, count): LocalDate[]` and `asyncDaysAhead(days, from, count)`.
 - `index.ts` re-exports everything.
 
@@ -95,7 +95,7 @@ ICS parsing lives in `src/lib/server/ics.ts`: `parseIcs(text): ParsedEvent[]` wi
 - `src/lib/server/db/*.ts` — typed repository functions that take the per-request client and return planner types (database task). One file per table group: `settings.ts`, `kinds.ts`, `rules.ts`, `sources.ts` (never returns `ics_url` except `getSourceUrl`), `events.ts`, `allocations.ts` (`setDayAllocation` replaces all rows for a day), `projects.ts`, `classes.ts`, `sessions.ts` (`startSession`, `endSession`, `activeSession`, `latestNotes`), `defaults.ts` (`ensureDefaults`), and `index.ts`.
 - `src/lib/server/context.ts` — `loadPlannerContext(locals, { from, to })` returns settings, kinds, rules, events, projects, allocations, `days`, `familyIds` (integration step, written before the view tasks start).
 - `src/lib/server/sync.ts` — `syncSource(client, source)` fetches, parses, upserts events by `(source_id, uid)`, deletes events no longer in the feed within the feed's date span, and records `last_synced_at` / `last_error` (settings task).
-- `src/lib/server/github.ts` — open issues for `owner/name` with `GITHUB_TOKEN`; reads `size:N` (default 1) and `deep` / `shallow` labels; 5-minute in-memory cache (projects task).
+- `src/lib/server/github.ts` — issues and milestones for `owner/name` with `GITHUB_TOKEN` (read and write); reads `size:N` (default 1), `deep` / `shallow`, and `status:next` / `status:doing` labels; 5-minute in-memory cache, cleared for a repo on every write. Board and burndown helpers are pure, in `src/lib/projects/board.ts` and `burndown.ts`.
 
 ## Routes
 
@@ -104,7 +104,7 @@ ICS parsing lives in `src/lib/server/ics.ts`: `parseIcs(text): ParsedEvent[]` wi
 | `/login`, `/logout`, `/` (redirect to `/season`), root layout, `+error.svelte` | shell |
 | `/season` | season |
 | `/day`, `/day/[date]`, and the root layout's next-chunk readout | day |
-| `/projects` | projects |
+| `/projects`, `/projects/[id]` (board, milestone, burndown) | projects |
 | `/settings`, `/api/cron/sync-ics`, `vercel.json` | settings |
 
 Shared components in `src/lib/components` (shell task): `DayBar.svelte` (vertical 24-hour capsule: segments plus colored block spans, with `today`, `past`, `selected` states), `DayStrip.svelte` (horizontal 24-hour bar with ticks 00/06/12/18/24 and an optional red now-marker), `Swatch.svelte`.

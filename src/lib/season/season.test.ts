@@ -8,16 +8,17 @@ import {
 	paintedDay,
 	seasonRange,
 	weekHeadings,
-	weekMondays,
+	weekStarts,
 	withBlock
 } from './season';
 
 describe('seasonRange', () => {
-	it('runs from the Monday 4 weeks back to the Sunday 30 weeks ahead', () => {
+	it('runs from the Sunday 4 weeks back to the Saturday 30 weeks ahead', () => {
 		const r = seasonRange('2026-10-16'); // Friday
-		expect(r.from).toBe('2026-09-14');
-		expect(r.to).toBe('2027-05-16');
-		expect(weekMondays(r)).toHaveLength(35);
+		expect(r.from).toBe('2026-09-13');
+		expect(r.to).toBe('2027-05-15');
+		expect(weekStarts(r)).toHaveLength(35);
+		expect(weekStarts(r)[0]).toBe('2026-09-13');
 	});
 });
 
@@ -43,10 +44,10 @@ describe('dates', () => {
 
 describe('weekHeadings', () => {
 	it('headings for the first row and weeks containing the 1st', () => {
-		expect(weekHeadings('2026-09-14', true)).toEqual(['2026-09']);
-		expect(weekHeadings('2026-09-21', false)).toEqual([]);
-		expect(weekHeadings('2026-09-28', false)).toEqual(['2026-10']);
-		expect(weekHeadings('2026-09-28', true)).toEqual(['2026-09', '2026-10']);
+		expect(weekHeadings('2026-09-13', true)).toEqual(['2026-09']);
+		expect(weekHeadings('2026-09-20', false)).toEqual([]);
+		expect(weekHeadings('2026-09-27', false)).toEqual(['2026-10']);
+		expect(weekHeadings('2026-09-27', true)).toEqual(['2026-09', '2026-10']);
 	});
 });
 
