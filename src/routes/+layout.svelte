@@ -7,7 +7,7 @@
 	import '@fontsource/ibm-plex-mono/300.css';
 	import '@fontsource/ibm-plex-mono/400.css';
 	import '../app.css';
-	import favicon from '$lib/assets/favicon.svg';
+	import Logo from '$lib/components/Logo.svelte';
 	import { page } from '$app/state';
 
 	let { data, children } = $props();
@@ -24,15 +24,11 @@
 	const isActive = (href: string) => path === href || path.startsWith(href + '/');
 </script>
 
-<svelte:head>
-	<link rel="icon" href={favicon} />
-</svelte:head>
-
 <div class="chrome">
 	<div class="screen">
 		{#if signedIn}
 			<header class="topbar">
-				<a class="brand" href="/season" aria-label="Wyndow">WYND<span class="hal">O</span>W</a>
+				<a class="brand" href="/season" aria-label="Wyndow"><Logo /><span class="brand-word" aria-hidden="true">WYND<span class="hal">O</span>W</span></a>
 				{#if data.nextChunk}
 					<a class="next-chunk" href={data.nextChunk.href}>{data.nextChunk.label}</a>
 				{/if}

@@ -190,6 +190,36 @@ textarea {
 .brand:hover {
 	text-decoration: none;
 }
+.brand,
+.brand-word {
+	display: inline-flex;
+	align-items: center;
+}
+.brand {
+	gap: 10px;
+}
+.logo {
+	display: block;
+	flex: none;
+	overflow: visible;
+}
+.logo-small {
+	height: 18px;
+	width: auto;
+	aspect-ratio: 716 / 600;
+}
+.logo-large {
+	height: 56px;
+	width: auto;
+	aspect-ratio: 716 / 600;
+}
+.logo-panel {
+	fill: var(--text-bright);
+}
+.logo-eye {
+	fill: var(--hal-red);
+	filter: drop-shadow(0 0 3px rgb(171 6 24 / 0.8));
+}
 .hal {
 	color: var(--hal-red);
 	text-shadow: 0 0 8px rgb(171 6 24 / 0.9), 0 0 18px rgb(171 6 24 / 0.5);
@@ -240,6 +270,8 @@ textarea {
 	padding: var(--space-5) 0;
 }
 .login-brand {
+	flex-direction: column;
+	gap: var(--space-4);
 	text-align: center;
 	font-size: 16px;
 }

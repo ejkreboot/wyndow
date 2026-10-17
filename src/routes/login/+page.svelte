@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Logo from '$lib/components/Logo.svelte';
 	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
 
@@ -11,7 +12,7 @@
 </svelte:head>
 
 <main class="login">
-	<div class="login-brand brand" aria-label="Wyndow">WYND<span class="hal">O</span>W</div>
+	<div class="login-brand brand" role="img" aria-label="Wyndow"><Logo size="large" /><span class="brand-word" aria-hidden="true">WYND<span class="hal">O</span>W</span></div>
 	<form
 		class="login-form"
 		method="POST"

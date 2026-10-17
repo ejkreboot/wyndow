@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Logo from '$lib/components/Logo.svelte';
 	import { page } from '$app/state';
 
 	const known: Record<number, string> = {
@@ -15,7 +16,7 @@
 </svelte:head>
 
 <main class="error-screen">
-	<div class="brand" aria-label="Wyndow">WYND<span class="hal">O</span>W</div>
+	<div class="brand" role="img" aria-label="Wyndow"><Logo /><span class="brand-word" aria-hidden="true">WYND<span class="hal">O</span>W</span></div>
 	<p class="readout">{page.status}</p>
 	<p class="label">{message}</p>
 	<a class="btn" href="/season">Back to season</a>
