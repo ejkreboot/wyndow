@@ -1242,25 +1242,17 @@ textarea.field {
 	width: 100%;
 }
 
-/* The egg-shaped porthole from the pod-bay door. */
+/* A small dark-glass window in the door. */
 .airlock__port {
-	width: 46px;
-	height: 60px;
-	border-radius: 50% 50% 50% 50% / 58% 58% 42% 42%;
-	background: var(--screen);
+	width: 44px;
+	height: 56px;
+	border-radius: 14px;
+	background:
+		linear-gradient(135deg, transparent 38%, rgba(255, 255, 255, 0.1) 46%, transparent 58%),
+		var(--screen);
 	box-shadow:
 		0 0 0 4px var(--panel-sunk),
 		0 0 0 5px var(--seam);
-	display: grid;
-	place-items: center;
-}
-
-.airlock__port span {
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
-	background: var(--signal);
-	box-shadow: 0 0 10px 2px rgba(211, 38, 27, 0.55);
 }
 
 .field--code {

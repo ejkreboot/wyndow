@@ -28,7 +28,7 @@
 
 <main class="airlock">
 	<div class="airlock__door">
-		<div class="airlock__port" aria-hidden="true"><span></span></div>
+		<div class="airlock__port" aria-hidden="true"></div>
 		<span class="wordmark">Wyndow</span>
 
 		{#if codeStep}
