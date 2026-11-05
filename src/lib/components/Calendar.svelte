@@ -192,7 +192,7 @@
 				<div class="cell__head">
 					<button
 						class="cell__date"
-						aria-label={`${formatDayLong(day)}${list.length ? `, ${list.length} events` : ''}`}
+						aria-label={`${formatDayLong(day)}${list.length ? `, ${list.length} ${list.length === 1 ? 'event' : 'events'}` : ''}`}
 						onclick={() => openDay(day)}
 					>
 						{Number(day.slice(8))}

@@ -12,6 +12,7 @@
 	const done = $derived(todos.filter((t) => t.done));
 
 	let draft = $state('');
+	let highWater = 0;
 	let error = $state<string | null>(null);
 	let showDone = $state(false);
 	let editing = $state<string | null>(null);
@@ -31,9 +32,12 @@
 		const title = draft.trim();
 		if (!title) return;
 		draft = '';
-		const last = todos.reduce((max, t) => Math.max(max, t.position), 0);
-		todos = [...todos, { id: `tmp-${crypto.randomUUID()}`, title, done: false, position: last + 1024 }];
-		await call('addTodo', { title });
+		// High-water mark survives refreshes that land before an earlier add has committed.
+		const last = todos.reduce((max, t) => Math.max(max, t.position), highWater);
+		const position = last + 1024;
+		highWater = position;
+		todos = [...todos, { id: `tmp-${crypto.randomUUID()}`, title, done: false, position }];
+		await call('addTodo', { title, position: String(position) });
 	}
 
 	const pending = (todo: Todo) => todo.id.startsWith('tmp-');

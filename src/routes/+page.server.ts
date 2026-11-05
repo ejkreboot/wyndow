@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		db.from('events').select('*').eq('all_day', false).lt('starts_at', to).gte('ends_at', from),
 		db.from('events').select('*').eq('all_day', true).lte('start_date', toDate).gte('end_date', fromDate),
 		db.from('feeds').select('id, name, url, visible, last_synced_at, last_error').order('created_at'),
-		db.from('todos').select('id, title, done, position').order('position')
+		db.from('todos').select('id, title, done, position').order('position').order('created_at')
 	]);
 
 	const visibleFeeds = (feeds.data ?? []).filter((f) => f.visible).map((f) => f.id);
@@ -137,15 +137,20 @@ export const actions: Actions = {
 
 	// --- todos --------------------------------------------------------------
 	addTodo: async ({ request, locals }) => {
-		const title = str(await request.formData(), 'title');
+		const form = await request.formData();
+		const title = str(form, 'title');
 		if (!title) return fail(400, { message: 'Type something to add.' });
-		const { data: lastRow } = await locals.supabase
-			.from('todos')
-			.select('position')
-			.order('position', { ascending: false })
-			.limit(1)
-			.maybeSingle();
-		const position = (lastRow?.position ?? 0) + 1024;
+		// The client sends the position from its (optimistic) list, so quick successive adds keep their order.
+		let position = Number(str(form, 'position'));
+		if (!str(form, 'position') || !Number.isFinite(position)) {
+			const { data: lastRow } = await locals.supabase
+				.from('todos')
+				.select('position')
+				.order('position', { ascending: false })
+				.limit(1)
+				.maybeSingle();
+			position = (lastRow?.position ?? 0) + 1024;
+		}
 		const { error } = await locals.supabase.from('todos').insert({ title, position });
 		if (error) return fail(500, { message: error.message });
 		return { added: true };
